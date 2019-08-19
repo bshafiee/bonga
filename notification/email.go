@@ -3,6 +3,7 @@ package notification
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/bshafiee/bonga/scraping"
 	"github.com/sendgrid/sendgrid-go"
@@ -27,6 +28,10 @@ func (e *email) Notify(res []scraping.Result) error {
 }
 
 func submitMail(body string) (err error) {
+	key := os.Getenv("SENDGRID_API_KEY")
+	if len(key) == 0 {
+		return fmt.Errorf("could not load the key")
+	}
 	m := mail.NewV3Mail()
 	address := "notify@listings.com"
 	name := "Behrooz"
@@ -37,7 +42,7 @@ func submitMail(body string) (err error) {
 	p.AddTos(mail.NewEmail("Behrooz", "shafiee01@gmail.com"), mail.NewEmail("Hannah", "champ.hannah@gmail.com"))
 	m.AddPersonalizations(p)
 	m.AddContent(mail.NewContent("text/html", body))
-	client := sendgrid.NewSendClient("")
+	client := sendgrid.NewSendClient(key)
 	if _, err := client.Send(m); err != nil {
 		log.Println(err)
 		return err

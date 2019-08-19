@@ -2,6 +2,9 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/bshafiee/bonga/craiglist"
 	"github.com/bshafiee/bonga/notification"
@@ -24,12 +27,27 @@ func main() {
 		craiglist.MinPriceParam{2500},
 		craiglist.MaxPriceParam{3200},
 	}
-	res, err := c.Query(params)
-	if err != nil {
-		log.Fatal(err)
+
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, os.Interrupt)
+
+	ticker := time.NewTicker(300 * time.Second)
+	for {
+		select {
+		case <-ticker.C:
+			log.Println("here tick")
+			res, err := c.Query(params)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if len(res) > 0 {
+				if err := notifEngine.Notify(res); err != nil {
+					log.Fatal(err)
+				}
+			}
+		case <-sigCh:
+			return
+		}
 	}
 
-	if err := notifEngine.Notify(res); err != nil {
-		log.Fatal(err)
-	}
 }

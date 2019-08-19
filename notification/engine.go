@@ -53,6 +53,9 @@ func (e *Engine) Notify(results []scraping.Result) error {
 			e.seenIDs[res.ID] = true
 		}
 	}
+	if len(newRes) <= 0 {
+		return nil
+	}
 	//2) notify
 	for _, ch := range e.channels {
 		if err := ch.Notify(newRes); err != nil {
