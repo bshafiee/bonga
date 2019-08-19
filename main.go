@@ -15,7 +15,17 @@ import (
 
 const sendmail = "/usr/sbin/sendmail"
 
+func checkWritable() {
+	file, err := os.Create("gs:///bonga-250321.appspot.com/hi.txt")
+	if err != nil {
+		log.Fatal("failed to open writable")
+	}
+	fmt.Println("file success")
+	defer file.Close()
+}
+
 func main() {
+	checkWritable()
 	key := os.Getenv("SENDGRID_API_KEY")
 	if len(key) == 0 {
 		log.Fatal("could not load the SENDGRID key")

@@ -5,5 +5,5 @@ runtime: go112
 # The following env variables may contain sensitive information that grants
 # anyone access to your database. Do not add this file to your source control.
 env_variables:
-        SENDGRID_API_KEY: ""
+        SENDGRID_API_KEY: "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"
 # [END env]
