@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
@@ -14,6 +16,17 @@ import (
 const sendmail = "/usr/sbin/sendmail"
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Println("$PORT must be set")
+		port = "8000"
+	}
+	// implement /services/ping for service health
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello Beroo")
+	})
+	go http.ListenAndServe(":"+port, nil)
+
 	notifEngine := notification.NewNotificationEngine("list.txt", []notification.Channel{notification.NewEmailNotification()})
 	if err := notifEngine.Initialize(); err != nil {
 		log.Fatal(err)
