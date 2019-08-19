@@ -16,10 +16,15 @@ import (
 const sendmail = "/usr/sbin/sendmail"
 
 func main() {
+	key := os.Getenv("SENDGRID_API_KEY")
+	if len(key) == 0 {
+		log.Fatal("could not load the SENDGRID key")
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Println("$PORT must be set")
-		port = "8000"
+		port = "8080"
 	}
 	// implement /services/ping for service health
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
