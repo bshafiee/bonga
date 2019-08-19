@@ -15,17 +15,7 @@ import (
 
 const sendmail = "/usr/sbin/sendmail"
 
-func checkWritable() {
-	file, err := os.Create("gs:///bonga-250321.appspot.com/hi.txt")
-	if err != nil {
-		log.Fatal("failed to open writable")
-	}
-	fmt.Println("file success")
-	defer file.Close()
-}
-
 func main() {
-	checkWritable()
 	key := os.Getenv("SENDGRID_API_KEY")
 	if len(key) == 0 {
 		log.Fatal("could not load the SENDGRID key")
@@ -59,14 +49,14 @@ func main() {
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt)
 
-	ticker := time.NewTicker(300 * time.Second)
+	ticker := time.NewTicker(120 * time.Second)
 	for {
 		select {
 		case <-ticker.C:
 			log.Println("here tick")
 			res, err := c.Query(params)
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("craiglist query error", err)
 			}
 			if len(res) > 0 {
 				if err := notifEngine.Notify(res); err != nil {

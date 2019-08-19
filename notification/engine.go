@@ -36,8 +36,8 @@ func (e *Engine) Initialize() error {
 
 	scanner := bufio.NewScanner(inFile)
 	for scanner.Scan() {
-		if id := strings.TrimSpace(scanner.Text()); len(id) > 0 {
-			e.seenIDs[id] = true
+		if title := strings.TrimSpace(scanner.Text()); len(title) > 0 {
+			e.seenIDs[title] = true
 		}
 	}
 	fmt.Println("loaded ", len(e.seenIDs), " existing IDs")
@@ -48,14 +48,16 @@ func (e *Engine) Notify(results []scraping.Result) error {
 	//1) find new ones
 	newRes := make([]scraping.Result, 0)
 	for _, res := range results {
-		if !e.seenIDs[res.ID] {
+		if !e.seenIDs[res.Title] {
 			newRes = append(newRes, res)
-			e.seenIDs[res.ID] = true
+			e.seenIDs[res.Title] = true
 		}
 	}
 	if len(newRes) <= 0 {
 		return nil
 	}
+	fmt.Println("found ", len(newRes), " new listings")
+
 	//2) notify
 	for _, ch := range e.channels {
 		if err := ch.Notify(newRes); err != nil {
@@ -74,8 +76,8 @@ func (e *Engine) updateSeenIDs() error {
 	defer file.Close()
 
 	w := bufio.NewWriter(file)
-	for id := range e.seenIDs {
-		fmt.Fprintln(w, id)
+	for title := range e.seenIDs {
+		fmt.Fprintln(w, title)
 	}
 	return w.Flush()
 }
