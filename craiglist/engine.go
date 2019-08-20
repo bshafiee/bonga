@@ -72,10 +72,11 @@ func (cs *craiglistScraper) Query(params []scraping.Parameter) ([]scraping.Resul
 		resRows.Each(func(i int, s *goquery.Selection) {
 			// For each item found, get the band and title
 			id := s.AttrOr("data-pid", "")
-			title := s.Find(".result-title").Text()
+			title := s.Find(".result-title").First().Text()
 			price := s.Find(".result-price").First().Text()
 			url := s.Find("a").AttrOr("href", "")
 			img := s.Find(".swipe-wrap div img").AttrOr("src", "")
+			date := s.Find(".result-date").First().Text()
 			if !unique[title] {
 				unique[title] = true
 				results = append(results, scraping.Result{
@@ -84,6 +85,7 @@ func (cs *craiglistScraper) Query(params []scraping.Parameter) ([]scraping.Resul
 					Price: price,
 					Img:   img,
 					ID:    id,
+					Date:  date,
 				})
 			}
 		})

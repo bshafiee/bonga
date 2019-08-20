@@ -9,6 +9,7 @@ type Result struct {
 	ID           string
 	GeoTag       string
 	Neighborhood string
+	Date         string
 }
 
 type Parameter interface {

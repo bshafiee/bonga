@@ -22,7 +22,11 @@ func NewEmailNotification() Channel {
 func (e *email) Notify(res []scraping.Result) error {
 	body := "Hello <b>Behrooz & Hannah</b>😍<br> "
 	for _, r := range res {
-		body += r.Price + " <a href='" + r.URL + "'>" + r.Title + "</a><br>"
+		if len(r.Date) > 0 {
+			body += r.Price + " (" + r.Date + ") <a href='" + r.URL + "'>" + r.Title + "</a><br>"
+		} else {
+			body += r.Price + " <a href='" + r.URL + "'>" + r.Title + "</a><br>"
+		}
 	}
 	return submitMail(body)
 }
