@@ -44,6 +44,7 @@ func main() {
 		craiglist.MinBedsParam{2},
 		craiglist.MinPriceParam{2500},
 		craiglist.MaxPriceParam{3200},
+		craiglist.MaxBedsParam{2},
 	}
 
 	sigCh := make(chan os.Signal, 1)
