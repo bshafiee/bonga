@@ -50,7 +50,7 @@ func main() {
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt)
 
-	ticker := time.NewTicker(120 * time.Second)
+	ticker := time.NewTicker(60 * 15 * time.Second)
 	for {
 		select {
 		case <-ticker.C:
