@@ -40,7 +40,7 @@ func main() {
 	c := craiglist.NewCraiglistScraper()
 	params := []scraping.Parameter{
 		craiglist.HasPictureParam{true},
-		craiglist.MinBathParam{2},
+		craiglist.MinBathParam{1},
 		craiglist.MinBedsParam{2},
 		craiglist.MinPriceParam{2500},
 		craiglist.MaxPriceParam{3200},
