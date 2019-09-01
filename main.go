@@ -43,7 +43,7 @@ func main() {
 		craiglist.MinBathParam{1},
 		craiglist.MinBedsParam{2},
 		craiglist.MinPriceParam{2500},
-		craiglist.MaxPriceParam{3200},
+		craiglist.MaxPriceParam{3300},
 		craiglist.MaxBedsParam{2},
 	}
 
