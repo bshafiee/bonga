@@ -57,7 +57,8 @@ func main() {
 			log.Println("here tick")
 			res, err := c.Query(params)
 			if err != nil {
-				log.Fatal("craiglist query error", err)
+				log.Println("craiglist query error:", err)
+				continue
 			}
 			if len(res) > 0 {
 				if err := notifEngine.Notify(res); err != nil {
